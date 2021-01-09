@@ -62,7 +62,6 @@ export default {
             message: '恭喜你，登录成功',
             type: 'success'
           })
-          console.log(res)
           window.sessionStorage.setItem('token', res.data.data.token)
           this.$router.push('home')
           // 1.登入成功后保存token到sessionStorage中
@@ -75,7 +74,6 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-  @import '~assets/css/fonts/iconfont.css';
   #login{
     background: #2b4b6b;
     padding: 0;
@@ -117,5 +115,6 @@ export default {
     width: 100%;
     box-sizing: border-box;
     padding: 0 10px;
+    
   }
 </style>
