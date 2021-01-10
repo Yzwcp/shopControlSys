@@ -29,7 +29,8 @@ import {
     Tag,
     Tree,
     Select,
-    Option
+    Option,
+    Popconfirm
 } from 'element-ui'
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm
@@ -61,3 +62,4 @@ Vue.use(Tag)
 Vue.use(Tree)
 Vue.use(Select)
 Vue.use(Option)
+Vue.use(Popconfirm)
