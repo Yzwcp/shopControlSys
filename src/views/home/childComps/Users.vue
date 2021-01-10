@@ -41,8 +41,8 @@
                 <el-tooltip class="item" effect="dark" content="修改信息" placement="top">
                     <el-button size='mini' @click="modifyUsers(scope.row.id)" type="primary" icon="el-icon-edit"></el-button>
                 </el-tooltip>   
-                <el-tooltip class="item" effect="dark" content="设置" placement="top">
-                    <el-button size='mini' type="warning" icon="el-icon-setting"></el-button>
+                <el-tooltip class="item" effect="dark" content="分配权限" placement="top">
+                    <el-button size='mini' @click="ShowRoledialog(scope.row)" type="warning" icon="el-icon-setting"></el-button>
                 </el-tooltip> 
                 <el-tooltip class="item" effect="dark" content="删除" placement="top">
                     <el-button size='mini' @click="usersDelete(scope.row.id)" type="danger" icon="el-icon-delete"></el-button>   
@@ -112,6 +112,27 @@
             <el-button type="primary" @click="modifyBtn">确 定</el-button></el-form>
         </span>
         
+    </el-dialog>
+    <!-- 分配角色对话框 -->
+    <el-dialog
+      title="提示"
+      :visible.sync="isShowRoledialog"
+      @close='RolesClose'
+      width="50%">
+      <p>用户名:{{showRoleInfo.username}}</p>
+      <p>角色:{{showRoleInfo.role_name}}</p>
+      <el-select v-model="Rolevalue"  placeholder="请选择">
+          <el-option
+          v-for="item in RolesList"
+          :key="item.id"
+          :label="item.roleName"
+          :value="item.id">
+          </el-option>
+      </el-select>  
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="isShowRoledialog = false">取 消</el-button>
+        <el-button type="primary" @click="modifyRoleBtn">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -197,6 +218,12 @@ export default {
                     { min: 2, max: 12, message: '长度在2-10个字符之间', trigger: 'blur' }
                 ] 
             },
+            //角色对话框
+            isShowRoledialog:false,
+            showRoleInfo:{},
+            RolesList:[],
+            //select 值
+            Rolevalue:''
         }
     },
     created(){
@@ -288,12 +315,14 @@ export default {
                 
             })
         },
+        // 修改用户
         modifyClose(){
             this.$refs.modifyFormRef.resetFields()
 
         } ,
+        //删除用户
         usersDelete(id){
-        this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+                this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
@@ -312,9 +341,32 @@ export default {
                         message: '已取消删除'
                     });          
                     });
-                }
-            }
+        },
+        //获得角色
+        ShowRoledialog(role){
+            this.isShowRoledialog = true
+            this.showRoleInfo = role
+            this.$http.get('roles').then((res)=>{
+                if(res.data.meta.status !==200) return this.$message(res.data.meta.msg)
+                    this.RolesList = res.data.data
+                    this.$message(res.data.meta.msg)
+            })  
+        },
+        //修改角色
+        async modifyRoleBtn(){
+                if (!this.Rolevalue) return this.$message.error('选择角色')
+                const {data:res} = await this.$http.put(`users/${this.showRoleInfo.id}/role`,{rid:this.Rolevalue})
+                console.log(res);
+                if(res.meta.status !==200) return this.$message(res.meta.msg)
+                this.$message(res.meta.msg)
+                this.isShowRoledialog=false
+                this.getUsersList()
+        },
+        RolesClose(){
+            this.Rolevalue = ''
         }
+    }
+}
 </script>
 
 <style scoped>

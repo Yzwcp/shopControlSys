@@ -9,6 +9,10 @@ const Welcome = () =>
     import ('views/home/childComps/Welcome')
 const Users = () =>
     import ('views/home/childComps/Users')
+const Rights = () =>
+    import ('views/power/Rights')
+const Roles = () =>
+    import ('views/power/Roles')
 const routes = [
     { path: '/', redirect: '/login' },
     { path: '/login', component: Login },
@@ -19,6 +23,9 @@ const routes = [
         children: [
             { path: '/welcome', component: Welcome },
             { path: '/users', component: Users },
+            { path: '/rights', component: Rights },
+            { path: '/roles', component: Roles }
+
         ]
     }
 ]
