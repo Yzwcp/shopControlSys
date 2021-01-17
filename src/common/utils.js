@@ -1,36 +1,62 @@
-export function dateFormat(date, format) {
-    if (typeof date === "string") {
-        var mts = date.match(/(\/Date\((\d+)\)\/)/);
-        if (mts && mts.length >= 3) {
-            date = parseInt(mts[2]);
-        }
+function format(date, format) {
+    if (!date) {
+        return ''
     }
-    date = new Date(date);
-    if (!date || date.toUTCString() == "Invalid Date") {
-        return "";
-    }
-    var map = {
-        "M": date.getMonth() + 1, //月份 
-        "d": date.getDate(), //日 
-        "h": date.getHours(), //小时 
-        "m": date.getMinutes(), //分 
-        "s": date.getSeconds(), //秒 
-        "q": Math.floor((date.getMonth() + 3) / 3), //季度 
-        "S": date.getMilliseconds() //毫秒 
-    };
 
-    format = format.replace(/([yMdhmsqS])+/g, function (all, t) {
-        var v = map[t];
-        if (v !== undefined) {
-            if (all.length > 1) {
-                v = '0' + v;
-                v = v.substr(v.length - 2);
-            }
-            return v;
-        } else if (t === 'y') {
-            return (date.getFullYear() + '').substr(4 - all.length);
-        }
-        return all;
-    });
-    return format;
+    let d = new Date(date)
+
+    // 年  
+    if (/YYYY/.test(format)) {
+        format = format.replace(/YYYY/, d.getFullYear())
+    }
+    // 月份  
+    let month = d.getMonth() + 1
+    if (/MM/.test(format)) {
+        let monthStr = month < 10 ? '0' + month : month
+        format = format.replace(/MM/, monthStr)
+    } else if (/M/.test(format)) {
+        format = format.replace(/M/, month)
+    }
+    // 日期  
+    let dates = d.getDate()
+    if (/DD/.test(format)) {
+        let dateStr = dates < 10 ? '0' + dates : dates
+        format = format.replace(/DD/, dateStr)
+    } else if (/D/.test(format)) {
+        format = format.replace(/D/, dates)
+    }
+    // 小时  
+    let hours = d.getHours()
+    if (/HH/.test(format)) {
+        let hoursStr = hours < 10 ? '0' + hours : hours
+        format = format.replace(/HH/, hoursStr)
+    } else if (/H/.test(format)) {
+        format = format.replace(/H/, hours)
+    } else if (/hh/.test(format)) {
+        let hoursMin = hours > 12 ? hours - 12 : hours
+        let hoursStr = hoursMin < 10 ? '0' + hoursMin : hoursMin
+        format = format.replace(/hh/, hoursStr)
+    } else if (/h/.test(format)) {
+        let hoursMin = hours > 12 ? hours - 12 : hours
+        format = format.replace(/h/, hoursMin)
+    }
+    // 分  
+    let minutes = d.getMinutes()
+    if (/mm/.test(format)) {
+        let minutesStr = minutes < 10 ? '0' + minutes : minutes
+        format = format.replace(/mm/, minutesStr)
+    } else if (/m/.test(format)) {
+        format = format.replace(/m/, minutes)
+    }
+    // 秒  
+    let seconds = d.getSeconds()
+    if (/ss/.test(format)) {
+        let secondsStr = seconds < 10 ? '0' + seconds : seconds
+        format = format.replace(/ss/, secondsStr)
+    } else if (/s/.test(format)) {
+        format = format.replace(/s/, seconds)
+    }
+    return format
 }
+
+export default format

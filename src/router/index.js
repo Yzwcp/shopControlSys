@@ -13,6 +13,18 @@ const Rights = () =>
     import ('views/power/Rights')
 const Roles = () =>
     import ('views/power/Roles')
+const Cate = () =>
+    import ('views/goods/Cate')
+const GoodsParams = () =>
+    import ('views/goods/GoodsParams')
+const GoodsItem = () =>
+    import ('views/goods/GoodsItem')
+const addGoods = () =>
+    import ('views/goods/addGoods')
+const orders = () =>
+    import ('views/orders/Orders')
+const reports = () =>
+    import ('views/reports/reports')
 const routes = [
     { path: '/', redirect: '/login' },
     { path: '/login', component: Login },
@@ -24,8 +36,21 @@ const routes = [
             { path: '/welcome', component: Welcome },
             { path: '/users', component: Users },
             { path: '/rights', component: Rights },
-            { path: '/roles', component: Roles }
+            { path: '/roles', component: Roles },
+            { path: '/categories', component: Cate },
+            { path: '/params', component: GoodsParams },
+            {
+                path: '/goods',
+                component: GoodsItem
 
+            },
+            {
+                path: '/goods/add',
+                component: addGoods
+
+            },
+            { path: '/orders', component: orders },
+            { path: '/reports', component: reports },
         ]
     }
 ]
